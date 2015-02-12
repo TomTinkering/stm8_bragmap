@@ -1,17 +1,16 @@
 ;--------------------------------------------------------
 ; File Created by SDCC : free open source ANSI-C Compiler
 ; Version 3.4.0 #8981 (Oct  6 2014) (Linux)
-; This file was generated Wed Feb 11 23:22:39 2015
+; This file was generated Thu Feb 12 22:05:52 2015
 ;--------------------------------------------------------
-	.module uart
+	.module main
 	.optsdcc -mstm8
 	
 ;--------------------------------------------------------
 ; Public variables in this module
 ;--------------------------------------------------------
 	.globl _main
-	.globl _uart_write
-	.globl _strlen
+	.globl _blink
 ;--------------------------------------------------------
 ; ram data
 ;--------------------------------------------------------
@@ -108,120 +107,25 @@ __sdcc_program_startup:
 ; code
 ;--------------------------------------------------------
 	.area CODE
-;	uart.c: 4: int uart_write(const char *str) {
-;	-----------------------------------------
-;	 function uart_write
-;	-----------------------------------------
-_uart_write:
-	sub	sp, #3
-;	uart.c: 6: for(i = 0; i < strlen(str); i++) {
-	clr	(0x01, sp)
-00106$:
-	ldw	x, (0x06, sp)
-	pushw	x
-	call	_strlen
-	addw	sp, #2
-	ldw	(0x02, sp), x
-	ld	a, (0x01, sp)
-	ld	xl, a
-	rlc	a
-	clr	a
-	sbc	a, #0x00
-	ld	xh, a
-	cpw	x, (0x02, sp)
-	jrnc	00104$
-;	uart.c: 7: while(!(USART1_SR & USART_SR_TXE));
-00101$:
-	ldw	x, #0x5230
-	ld	a, (x)
-	sll	a
-	jrnc	00101$
-;	uart.c: 8: USART1_DR = str[i];
-	clrw	x
-	ld	a, (0x01, sp)
-	ld	xl, a
-	addw	x, (0x06, sp)
-	ld	a, (x)
-	ldw	x, #0x5231
-	ld	(x), a
-;	uart.c: 6: for(i = 0; i < strlen(str); i++) {
-	inc	(0x01, sp)
-	jra	00106$
-00104$:
-;	uart.c: 10: return(i); // Bytes sent
-	ld	a, (0x01, sp)
-	ld	xl, a
-	rlc	a
-	clr	a
-	sbc	a, #0x00
-	ld	xh, a
-	addw	sp, #3
-	ret
-;	uart.c: 13: int main() {
+;	main.c: 10: int main() {
 ;	-----------------------------------------
 ;	 function main
 ;	-----------------------------------------
 _main:
-;	uart.c: 16: CLK_DIVR = 0x00; // Set the frequency to 16 MHz
-	ldw	x, #0x50c0
-	clr	(x)
-;	uart.c: 17: CLK_PCKENR1 = 0xFF; // Enable peripherals
-	ldw	x, #0x50c3
-	ld	a, #0xff
+;	main.c: 13: PE_DDR = 0x80;
+	ldw	x, #0x5016
+	ld	a, #0x80
 	ld	(x), a
-;	uart.c: 19: PC_DDR = 0x08; // Put TX line on
-	ldw	x, #0x500c
-	ld	a, #0x08
+;	main.c: 14: PE_CR1 = 0x80;
+	ldw	x, #0x5017
+	ld	a, #0x80
 	ld	(x), a
-;	uart.c: 20: PC_CR1 = 0x08;
-	ldw	x, #0x500d
-	ld	a, #0x08
-	ld	(x), a
-;	uart.c: 22: USART1_CR2 = USART_CR2_TEN; // Allow TX & RX
-	ldw	x, #0x5235
-	ld	a, #0x08
-	ld	(x), a
-;	uart.c: 23: USART1_CR3 &= ~(USART_CR3_STOP1 | USART_CR3_STOP2); // 1 stop bit
-	ldw	x, #0x5236
-	ld	a, (x)
-	and	a, #0xcf
-	ld	(x), a
-;	uart.c: 24: USART1_BRR2 = 0x03; USART1_BRR1 = 0x68; // 9600 baud
-	ldw	x, #0x5233
-	ld	a, #0x03
-	ld	(x), a
-	ldw	x, #0x5232
-	ld	a, #0x68
-	ld	(x), a
-;	uart.c: 26: do {
+;	main.c: 16: while(1){
 00102$:
-;	uart.c: 27: uart_write("Hello World!\n");
-	ldw	x, #___str_0+0
-	pushw	x
-	call	_uart_write
-	addw	sp, #2
-;	uart.c: 28: for(i = 0; i < 147456; i++) { } // Sleep
-	ldw	y, #0x4000
-	ldw	x, #0x0002
-00107$:
-	subw	y, #0x0001
-	ld	a, xl
-	sbc	a, #0x00
-	ld	xl, a
-	ld	a, xh
-	sbc	a, #0x00
-	ld	xh, a
-	tnzw	y
-	jrne	00107$
-	tnzw	x
-	jreq	00102$
-;	uart.c: 29: } while(1);
-	jra	00107$
+;	main.c: 17: blink();
+	call	_blink
+	jra	00102$
 	ret
 	.area CODE
-___str_0:
-	.ascii "Hello World!"
-	.db 0x0A
-	.db 0x00
 	.area INITIALIZER
 	.area CABS (ABS)

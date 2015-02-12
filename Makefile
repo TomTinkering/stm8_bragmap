@@ -31,36 +31,36 @@ C_SRC = $(wildcard $(addsuffix *.c,$(SRC_DIRS)))
 OBJ_OUTPUT_DIR = build/
 
 # define the C object filenames to generate
-OBJECT_NAMES = $(notdir $(C_SRC:.c=.ihx))
-#OBJECT_NAMES += $(notdir $(CPP_SRC:.cpp=.ihx))
-#OBJECT_NAMES += $(notdir $(ASM_SRC:.s=.ihx))
+OBJECT_NAMES = $(notdir $(C_SRC:.c=.rel))
+#OBJECT_NAMES += $(notdir $(CPP_SRC:.cpp=.rel))
+#OBJECT_NAMES += $(notdir $(ASM_SRC:.s=.rel))
 
 # add the output path to all the object names
-OBJECTS = $(patsubst %.ihx, $(OBJ_OUTPUT_DIR)%.ihx, $(OBJECT_NAMES))
+OBJECTS = $(patsubst %.rel, $(OBJ_OUTPUT_DIR)%.rel, $(OBJECT_NAMES))
 
 # build a search list for make dependencies
 vpath %.c $(SRC_DIRS)
 #vpath %.cpp $(SRC_DIRS)
 #vpath %.s $(ASM_DIRS)
 vpath %.h $(INCLUDE_DIRS)
-vpath %.ihx
+vpath %.rel
 
 # define any directories containing header files other than /usr/include
 INCLUDES = $(addprefix -I,$(INCLUDE_DIRS)) 
 
+CFLAGS = -mstm8 --out-fmt-ihx -D__SDCC__ --std-c99
+LIBS   = -lstm8
+LDFLAGS = 
+
 #########################################################################
 
-all:: begin sdcc_version printvar $(PROJECT) end
+all:: begin sdcc_version printvar $(PROJECT).hex end
 
-$(PROJECT):$(notdir $(OBJECTS))
-TODO:: fix this shit, need to link all object together here...
-	$(SDCC) -lstm8 -mstm8 --out-fmt-ihx -D__SDCC__ $(CFLAGS) $(LDFLAGS) $(INCLUDES) -c $< -o $(OBJ_OUTPUT_DIR)$(notdir $@)
-	$(GCC) $(LDFLAGS) $(LDMAT) -O $(OBJECTS) $(LDLIBS) -o $(OBJ_OUTPUT_DIR)$(notdir $@)
+$(PROJECT).hex:$(notdir $(OBJECTS))
+	$(SDCC) $(LIBS) $(CFLAGS) $(LDFLAGS) $(OBJECTS) -o $(OBJ_OUTPUT_DIR)/bin/$(notdir $@)
 
 .PHONY: clean
 clean:
-	$(REMOVE) $(OBJ_OUTPUT_DIR)*.ihx
-	$(REMOVE) $(OBJ_OUTPUT_DIR)*.lst
 	$(REMOVE) $(OBJ_OUTPUT_DIR)*.*
 	
 # Eye Candy
@@ -83,15 +83,13 @@ sdcc_version:
 printvar: 
 	@echo $(OBJECTS)
 	
-#flash: $(OBJECT).ihx
-#stm8flash -cstlink -pstm8l150 -w $(OBJECT).ihx	
-	
+
 #########################################################################
-#  Default rules to compile .c and .cpp file to .o
-#  and assemble .s files to .o
+#  Default rules to compile .c and .cpp file to .rel
+#  and assemble .s files to .rel
 
 # General Rule for compiling C source files
-%.ihx: %.c
-	$(SDCC) -lstm8 -mstm8 --out-fmt-ihx -D__SDCC__ $(CFLAGS) $(LDFLAGS) $(INCLUDES) -c $< -o $(OBJ_OUTPUT_DIR)$(notdir $@)
+%.rel: %.c
+	$(SDCC) $(CFLAGS) $(INCLUDES) -c $< -o $(OBJ_OUTPUT_DIR)$(notdir $@)
 
 #########################################################################	
