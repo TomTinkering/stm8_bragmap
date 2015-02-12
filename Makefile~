@@ -50,12 +50,7 @@ INCLUDES = $(addprefix -I,$(INCLUDE_DIRS))
 
 #########################################################################
 
-all:: begin sdcc_version printvar $(PROJECT) end
-
-$(PROJECT):$(notdir $(OBJECTS))
-TODO:: fix this shit, need to link all object together here...
-	$(SDCC) -lstm8 -mstm8 --out-fmt-ihx -D__SDCC__ $(CFLAGS) $(LDFLAGS) $(INCLUDES) -c $< -o $(OBJ_OUTPUT_DIR)$(notdir $@)
-	$(GCC) $(LDFLAGS) $(LDMAT) -O $(OBJECTS) $(LDLIBS) -o $(OBJ_OUTPUT_DIR)$(notdir $@)
+all:: begin sdcc_version printvar $(OBJECT_NAMES) end
 
 .PHONY: clean
 clean:
