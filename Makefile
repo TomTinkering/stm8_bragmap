@@ -59,6 +59,9 @@ all:: begin sdcc_version printvar $(PROJECT).hex end
 $(PROJECT).hex:$(notdir $(OBJECTS))
 	$(SDCC) $(LIBS) $(CFLAGS) $(LDFLAGS) $(OBJECTS) -o $(OBJ_OUTPUT_DIR)/bin/$(notdir $@)
 
+flash: $(OBJ_OUTPUT_DIR)/bin/$(PROJECT).hex
+	stm8flash -cstlink -pstm8s003 -w $(OBJ_OUTPUT_DIR)/bin/$(PROJECT).hex
+
 .PHONY: clean
 clean:
 	$(REMOVE) $(OBJ_OUTPUT_DIR)*.*
