@@ -12,8 +12,8 @@ Symbol Table
   6 __sdcc_init_data                                               000000 R
   5 __sdcc_program_startup                                         000080 R
   3 __start__stack                                                 000000 R
-    _blink                                                         ****** GX
-  8 _main                                                          000000 GR
+  8 _init                                                          000000 GR
+  8 _main                                                          00004A GR
     l_DATA                                                         ****** GX
     l_INITIALIZER                                                  ****** GX
     s_DATA                                                         ****** GX
@@ -35,7 +35,7 @@ Area Table
    5 HOME                                       size     83   flags    0
    6 GSINIT                                     size     1A   flags    0
    7 GSFINAL                                    size      3   flags    0
-   8 CODE                                       size     12   flags    0
+   8 CODE                                       size     50   flags    0
    9 INITIALIZER                                size      0   flags    0
    A CABS                                       size      0   flags    8
 

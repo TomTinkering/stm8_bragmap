@@ -8,23 +8,22 @@
 #ifndef INCLUDE_STM8S003_H_
 #define INCLUDE_STM8S003_H_
 
+/*GPIO Pin number alias*/
+#define P0 (0b00000001)
+#define P1 (0b00000010)
+#define P2 (0b00000100)
+#define P3 (0b00001000)
+#define P4 (0b00010000)
+#define P5 (0b00100000)
+#define P6 (0b01000000)
+#define P7 (0b10000000)
+
 /* GPIO port A register addresses*/
 #define PA_ODR *(unsigned char*)0x5000
 #define PA_IDR *(unsigned char*)0x5001
 #define PA_DDR *(unsigned char*)0x5002
 #define PA_CR1 *(unsigned char*)0x5003
 #define PA_CR2 *(unsigned char*)0x5004
-
-/*GPIO Port A pin naming*/
-#define PA0 (0x00)
-#define PA1 (0x01)
-#define PA2 (0x02)
-#define PA3 (0x03)
-#define PA4 (0x04)
-#define PA5 (0x05)
-#define PA6 (0x06)
-#define PA7 (0x07)
-
 
 /* GPIO port B register addresses*/
 #define PB_ODR *(unsigned char*)0x5005
@@ -60,6 +59,7 @@
 #define PF_DDR *(unsigned char*)0x501B
 #define PF_CR1 *(unsigned char*)0x501C
 #define PF_CR2 *(unsigned char*)0x501D
+
 
 
 

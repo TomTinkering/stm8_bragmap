@@ -32,11 +32,13 @@ OBJ_OUTPUT_DIR = build/
 
 # define the C object filenames to generate
 OBJECT_NAMES = $(notdir $(C_SRC:.c=.rel))
+PREPROC_NAMES = $(notdir $(C_SRC:.c=.ppc))
 #OBJECT_NAMES += $(notdir $(CPP_SRC:.cpp=.rel))
 #OBJECT_NAMES += $(notdir $(ASM_SRC:.s=.rel))
 
 # add the output path to all the object names
 OBJECTS = $(patsubst %.rel, $(OBJ_OUTPUT_DIR)%.rel, $(OBJECT_NAMES))
+PREPROCS = $(patsubst %.ppc, $(OBJ_OUTPUT_DIR)%.ppc, $(PREPROC_NAMES))
 
 # build a search list for make dependencies
 vpath %.c $(SRC_DIRS)
@@ -56,11 +58,18 @@ LDFLAGS =
 
 all:: begin sdcc_version printvar $(PROJECT).hex end
 
+pre:: begin sdcc_version printvar preproc end
+
 $(PROJECT).hex:$(notdir $(OBJECTS))
 	$(SDCC) $(LIBS) $(CFLAGS) $(LDFLAGS) $(OBJECTS) -o $(OBJ_OUTPUT_DIR)/bin/$(notdir $@)
 
 flash: $(OBJ_OUTPUT_DIR)/bin/$(PROJECT).hex
 	stm8flash -cstlink -pstm8s003 -w $(OBJ_OUTPUT_DIR)/bin/$(PROJECT).hex
+
+.PHONY: preproc
+preproc : $(notdir $(PREPROCS))
+	echo "Preprocessing done.."
+	
 
 .PHONY: clean
 clean:
@@ -94,5 +103,9 @@ printvar:
 # General Rule for compiling C source files
 %.rel: %.c
 	$(SDCC) $(CFLAGS) $(INCLUDES) -c $< -o $(OBJ_OUTPUT_DIR)$(notdir $@)
+
+# Show preprocessor output (don't build object)
+%.ppc: %.c
+	$(SDCC) $(CFLAGS) $(INCLUDES) -E -c $< -o $(OBJ_OUTPUT_DIR)$(notdir $@)
 
 #########################################################################	

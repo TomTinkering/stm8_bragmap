@@ -1,7 +1,7 @@
                                       1 ;--------------------------------------------------------
                                       2 ; File Created by SDCC : free open source ANSI-C Compiler
                                       3 ; Version 3.4.0 #8981 (Oct  6 2014) (Linux)
-                                      4 ; This file was generated Thu Feb 12 23:35:23 2015
+                                      4 ; This file was generated Sat Feb 14 15:53:52 2015
                                       5 ;--------------------------------------------------------
                                       6 	.module main
                                       7 	.optsdcc -mstm8
@@ -10,7 +10,7 @@
                                      10 ; Public variables in this module
                                      11 ;--------------------------------------------------------
                                      12 	.globl _main
-                                     13 	.globl _blink
+                                     13 	.globl _init
                                      14 ;--------------------------------------------------------
                                      15 ; ram data
                                      16 ;--------------------------------------------------------
@@ -87,7 +87,7 @@
       00808F AE 00 00         [ 2]   87 	ldw	x, #l_INITIALIZER
       008092 27 09            [ 1]   88 	jreq	00004$
       008094                         89 00003$:
-      008094 D6 80 CE         [ 1]   90 	ld	a, (s_INITIALIZER - 1, x)
+      008094 D6 80 EF         [ 1]   90 	ld	a, (s_INITIALIZER - 1, x)
       008097 D7 00 00         [ 1]   91 	ld	(s_INITIALIZED - 1, x), a
       00809A 5A               [ 2]   92 	decw	x
       00809B 26 F7            [ 1]   93 	jrne	00003$
@@ -101,31 +101,75 @@
                                     101 	.area HOME
                                     102 	.area HOME
       008080                        103 __sdcc_program_startup:
-      008080 CC 80 BD         [ 2]  104 	jp	_main
+      008080 CC 80 EA         [ 2]  104 	jp	_main
                                     105 ;	return from main will return to caller
                                     106 ;--------------------------------------------------------
                                     107 ; code
                                     108 ;--------------------------------------------------------
                                     109 	.area CODE
-                                    110 ;	main.c: 10: int main() {
+                                    110 ;	main.c: 95: ret_t init(void) {
                                     111 ;	-----------------------------------------
-                                    112 ;	 function main
+                                    112 ;	 function init
                                     113 ;	-----------------------------------------
-      0080BD                        114 _main:
-                                    115 ;	main.c: 13: PE_DDR = 0x80;
-      0080BD AE 50 16         [ 2]  116 	ldw	x, #0x5016
-      0080C0 A6 80            [ 1]  117 	ld	a, #0x80
-      0080C2 F7               [ 1]  118 	ld	(x), a
-                                    119 ;	main.c: 14: PE_CR1 = 0x80;
-      0080C3 AE 50 17         [ 2]  120 	ldw	x, #0x5017
-      0080C6 A6 80            [ 1]  121 	ld	a, #0x80
-      0080C8 F7               [ 1]  122 	ld	(x), a
-                                    123 ;	main.c: 16: while(1){
-      0080C9                        124 00102$:
-                                    125 ;	main.c: 17: blink();
-      0080C9 CD 80 A0         [ 4]  126 	call	_blink
-      0080CC 20 FB            [ 2]  127 	jra	00102$
-      0080CE 81               [ 4]  128 	ret
-                                    129 	.area CODE
-                                    130 	.area INITIALIZER
-                                    131 	.area CABS (ABS)
+      0080A0                        114 _init:
+                                    115 ;	main.c: 98: ENABLE_PULLUP(GPIOA,ALL_PINS);
+      0080A0 AE 50 03         [ 2]  116 	ldw	x, #0x5003
+      0080A3 F6               [ 1]  117 	ld	a, (x)
+      0080A4 AE 50 03         [ 2]  118 	ldw	x, #0x5003
+      0080A7 A6 FF            [ 1]  119 	ld	a, #0xff
+      0080A9 F7               [ 1]  120 	ld	(x), a
+                                    121 ;	main.c: 99: SET_INPUT(GPIOA,ALL_PINS);
+      0080AA AE 50 02         [ 2]  122 	ldw	x, #0x5002
+      0080AD F6               [ 1]  123 	ld	a, (x)
+      0080AE AE 50 02         [ 2]  124 	ldw	x, #0x5002
+      0080B1 7F               [ 1]  125 	clr	(x)
+                                    126 ;	main.c: 100: ENABLE_PULLUP(GPIOB,ALL_PINS);
+      0080B2 AE 50 08         [ 2]  127 	ldw	x, #0x5008
+      0080B5 F6               [ 1]  128 	ld	a, (x)
+      0080B6 AE 50 08         [ 2]  129 	ldw	x, #0x5008
+      0080B9 A6 FF            [ 1]  130 	ld	a, #0xff
+      0080BB F7               [ 1]  131 	ld	(x), a
+                                    132 ;	main.c: 101: SET_INPUT(GPIOB,ALL_PINS);
+      0080BC AE 50 07         [ 2]  133 	ldw	x, #0x5007
+      0080BF F6               [ 1]  134 	ld	a, (x)
+      0080C0 AE 50 07         [ 2]  135 	ldw	x, #0x5007
+      0080C3 7F               [ 1]  136 	clr	(x)
+                                    137 ;	main.c: 102: ENABLE_PULLUP(GPIOC,ALL_PINS);
+      0080C4 AE 50 0D         [ 2]  138 	ldw	x, #0x500d
+      0080C7 F6               [ 1]  139 	ld	a, (x)
+      0080C8 AE 50 0D         [ 2]  140 	ldw	x, #0x500d
+      0080CB A6 FF            [ 1]  141 	ld	a, #0xff
+      0080CD F7               [ 1]  142 	ld	(x), a
+                                    143 ;	main.c: 103: SET_INPUT(GPIOC,ALL_PINS);
+      0080CE AE 50 0C         [ 2]  144 	ldw	x, #0x500c
+      0080D1 F6               [ 1]  145 	ld	a, (x)
+      0080D2 AE 50 0C         [ 2]  146 	ldw	x, #0x500c
+      0080D5 7F               [ 1]  147 	clr	(x)
+                                    148 ;	main.c: 104: ENABLE_PULLUP(GPIOD,ALL_PINS);
+      0080D6 AE 50 12         [ 2]  149 	ldw	x, #0x5012
+      0080D9 F6               [ 1]  150 	ld	a, (x)
+      0080DA AE 50 12         [ 2]  151 	ldw	x, #0x5012
+      0080DD A6 FF            [ 1]  152 	ld	a, #0xff
+      0080DF F7               [ 1]  153 	ld	(x), a
+                                    154 ;	main.c: 105: SET_INPUT(GPIOD,ALL_PINS);
+      0080E0 AE 50 11         [ 2]  155 	ldw	x, #0x5011
+      0080E3 F6               [ 1]  156 	ld	a, (x)
+      0080E4 AE 50 11         [ 2]  157 	ldw	x, #0x5011
+      0080E7 7F               [ 1]  158 	clr	(x)
+                                    159 ;	main.c: 108: return EXIT_OK;
+      0080E8 4F               [ 1]  160 	clr	a
+      0080E9 81               [ 4]  161 	ret
+                                    162 ;	main.c: 114: int main() {
+                                    163 ;	-----------------------------------------
+                                    164 ;	 function main
+                                    165 ;	-----------------------------------------
+      0080EA                        166 _main:
+                                    167 ;	main.c: 117: init();
+      0080EA CD 80 A0         [ 4]  168 	call	_init
+                                    169 ;	main.c: 120: while(1){}
+      0080ED                        170 00102$:
+      0080ED 20 FE            [ 2]  171 	jra	00102$
+      0080EF 81               [ 4]  172 	ret
+                                    173 	.area CODE
+                                    174 	.area INITIALIZER
+                                    175 	.area CABS (ABS)

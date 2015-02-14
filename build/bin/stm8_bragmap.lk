@@ -6,7 +6,6 @@
 -k /usr/bin/../share/sdcc/lib/stm8
 -k /usr/share/sdcc/lib/stm8
 -l stm8
-build/blinky.rel
 build/main.rel
 
 -e

@@ -1,0 +1,642 @@
+# 1 "main.c"
+# 1 "<built-in>"
+# 1 "<command line>"
+# 1 "main.c"
+
+
+
+
+
+
+# 1 "include/stm8s.h" 1
+# 212 "include/stm8s.h"
+typedef signed char int8_t;
+typedef signed short int16_t;
+typedef signed long int32_t;
+
+
+typedef unsigned char uint8_t;
+typedef unsigned short uint16_t;
+typedef unsigned long uint32_t;
+
+
+
+typedef int32_t s32;
+typedef int16_t s16;
+typedef int8_t s8;
+
+typedef uint32_t u32;
+typedef uint16_t u16;
+typedef uint8_t u8;
+
+
+typedef enum {FALSE = 0, TRUE = !FALSE} bool;
+
+typedef enum {RESET = 0, SET = !RESET} FlagStatus, ITStatus, BitStatus, BitAction;
+
+typedef enum {DISABLE = 0, ENABLE = !DISABLE} FunctionalState;
+
+
+typedef enum {ERROR = 0, SUCCESS = !ERROR} ErrorStatus;
+# 266 "include/stm8s.h"
+typedef struct GPIO_struct
+{
+  volatile uint8_t ODR;
+  volatile uint8_t IDR;
+  volatile uint8_t DDR;
+  volatile uint8_t CR1;
+  volatile uint8_t CR2;
+}
+GPIO_TypeDef;
+# 295 "include/stm8s.h"
+ typedef struct ADC1_struct
+ {
+  volatile uint8_t DB0RH;
+  volatile uint8_t DB0RL;
+  volatile uint8_t DB1RH;
+  volatile uint8_t DB1RL;
+  volatile uint8_t DB2RH;
+  volatile uint8_t DB2RL;
+  volatile uint8_t DB3RH;
+  volatile uint8_t DB3RL;
+  volatile uint8_t DB4RH;
+  volatile uint8_t DB4RL;
+  volatile uint8_t DB5RH;
+  volatile uint8_t DB5RL;
+  volatile uint8_t DB6RH;
+  volatile uint8_t DB6RL;
+  volatile uint8_t DB7RH;
+  volatile uint8_t DB7RL;
+  volatile uint8_t DB8RH;
+  volatile uint8_t DB8RL;
+  volatile uint8_t DB9RH;
+  volatile uint8_t DB9RL;
+  uint8_t RESERVED[12];
+  volatile uint8_t CSR;
+  volatile uint8_t CR1;
+  volatile uint8_t CR2;
+  volatile uint8_t CR3;
+  volatile uint8_t DRH;
+  volatile uint8_t DRL;
+  volatile uint8_t TDRH;
+  volatile uint8_t TDRL;
+  volatile uint8_t HTRH;
+  volatile uint8_t HTRL;
+  volatile uint8_t LTRH;
+  volatile uint8_t LTRL;
+  volatile uint8_t AWSRH;
+  volatile uint8_t AWSRL;
+  volatile uint8_t AWCRH;
+  volatile uint8_t AWCRL;
+ }
+ ADC1_TypeDef;
+# 437 "include/stm8s.h"
+typedef struct AWU_struct
+{
+  volatile uint8_t CSR;
+  volatile uint8_t APR;
+  volatile uint8_t TBR;
+}
+AWU_TypeDef;
+# 477 "include/stm8s.h"
+typedef struct BEEP_struct
+{
+  volatile uint8_t CSR;
+}
+BEEP_TypeDef;
+# 505 "include/stm8s.h"
+typedef struct CLK_struct
+{
+  volatile uint8_t ICKR;
+  volatile uint8_t ECKR;
+  uint8_t RESERVED;
+  volatile uint8_t CMSR;
+  volatile uint8_t SWR;
+  volatile uint8_t SWCR;
+  volatile uint8_t CKDIVR;
+  volatile uint8_t PCKENR1;
+  volatile uint8_t CSSR;
+  volatile uint8_t CCOR;
+  volatile uint8_t PCKENR2;
+  uint8_t RESERVED1;
+  volatile uint8_t HSITRIMR;
+  volatile uint8_t SWIMCCR;
+}
+CLK_TypeDef;
+# 609 "include/stm8s.h"
+typedef struct TIM1_struct
+{
+  volatile uint8_t CR1;
+  volatile uint8_t CR2;
+  volatile uint8_t SMCR;
+  volatile uint8_t ETR;
+  volatile uint8_t IER;
+  volatile uint8_t SR1;
+  volatile uint8_t SR2;
+  volatile uint8_t EGR;
+  volatile uint8_t CCMR1;
+  volatile uint8_t CCMR2;
+  volatile uint8_t CCMR3;
+  volatile uint8_t CCMR4;
+  volatile uint8_t CCER1;
+  volatile uint8_t CCER2;
+  volatile uint8_t CNTRH;
+  volatile uint8_t CNTRL;
+  volatile uint8_t PSCRH;
+  volatile uint8_t PSCRL;
+  volatile uint8_t ARRH;
+  volatile uint8_t ARRL;
+  volatile uint8_t RCR;
+  volatile uint8_t CCR1H;
+  volatile uint8_t CCR1L;
+  volatile uint8_t CCR2H;
+  volatile uint8_t CCR2L;
+  volatile uint8_t CCR3H;
+  volatile uint8_t CCR3L;
+  volatile uint8_t CCR4H;
+  volatile uint8_t CCR4L;
+  volatile uint8_t BKR;
+  volatile uint8_t DTR;
+  volatile uint8_t OISR;
+}
+TIM1_TypeDef;
+# 821 "include/stm8s.h"
+typedef struct TIM2_struct
+{
+  volatile uint8_t CR1;
+
+ uint8_t RESERVED1;
+ uint8_t RESERVED2;
+
+  volatile uint8_t IER;
+  volatile uint8_t SR1;
+  volatile uint8_t SR2;
+  volatile uint8_t EGR;
+  volatile uint8_t CCMR1;
+  volatile uint8_t CCMR2;
+  volatile uint8_t CCMR3;
+  volatile uint8_t CCER1;
+  volatile uint8_t CCER2;
+  volatile uint8_t CNTRH;
+  volatile uint8_t CNTRL;
+  volatile uint8_t PSCR;
+  volatile uint8_t ARRH;
+  volatile uint8_t ARRL;
+  volatile uint8_t CCR1H;
+  volatile uint8_t CCR1L;
+  volatile uint8_t CCR2H;
+  volatile uint8_t CCR2L;
+  volatile uint8_t CCR3H;
+  volatile uint8_t CCR3L;
+}
+TIM2_TypeDef;
+# 949 "include/stm8s.h"
+typedef struct TIM3_struct
+{
+  volatile uint8_t CR1;
+  volatile uint8_t IER;
+  volatile uint8_t SR1;
+  volatile uint8_t SR2;
+  volatile uint8_t EGR;
+  volatile uint8_t CCMR1;
+  volatile uint8_t CCMR2;
+  volatile uint8_t CCER1;
+  volatile uint8_t CNTRH;
+  volatile uint8_t CNTRL;
+  volatile uint8_t PSCR;
+  volatile uint8_t ARRH;
+  volatile uint8_t ARRL;
+  volatile uint8_t CCR1H;
+  volatile uint8_t CCR1L;
+  volatile uint8_t CCR2H;
+  volatile uint8_t CCR2L;
+}
+TIM3_TypeDef;
+# 1055 "include/stm8s.h"
+typedef struct TIM4_struct
+{
+  volatile uint8_t CR1;
+
+ uint8_t RESERVED1;
+ uint8_t RESERVED2;
+
+  volatile uint8_t IER;
+  volatile uint8_t SR1;
+  volatile uint8_t EGR;
+  volatile uint8_t CNTR;
+  volatile uint8_t PSCR;
+  volatile uint8_t ARR;
+}
+TIM4_TypeDef;
+# 1118 "include/stm8s.h"
+typedef struct TIM5_struct
+{
+  volatile uint8_t CR1;
+  volatile uint8_t CR2;
+  volatile uint8_t SMCR;
+  volatile uint8_t IER;
+  volatile uint8_t SR1;
+  volatile uint8_t SR2;
+  volatile uint8_t EGR;
+  volatile uint8_t CCMR1;
+  volatile uint8_t CCMR2;
+  volatile uint8_t CCMR3;
+  volatile uint8_t CCER1;
+  volatile uint8_t CCER2;
+  volatile uint8_t CNTRH;
+  volatile uint8_t CNTRL;
+  volatile uint8_t PSCR;
+  volatile uint8_t ARRH;
+  volatile uint8_t ARRL;
+  volatile uint8_t CCR1H;
+  volatile uint8_t CCR1L;
+  volatile uint8_t CCR2H;
+  volatile uint8_t CCR2L;
+  volatile uint8_t CCR3H;
+  volatile uint8_t CCR3L;
+}TIM5_TypeDef;
+# 1257 "include/stm8s.h"
+typedef struct TIM6_struct
+{
+    volatile uint8_t CR1;
+    volatile uint8_t CR2;
+    volatile uint8_t SMCR;
+    volatile uint8_t IER;
+    volatile uint8_t SR1;
+    volatile uint8_t EGR;
+    volatile uint8_t CNTR;
+    volatile uint8_t PSCR;
+    volatile uint8_t ARR;
+}
+TIM6_TypeDef;
+# 1325 "include/stm8s.h"
+typedef struct I2C_struct
+{
+  volatile uint8_t CR1;
+  volatile uint8_t CR2;
+  volatile uint8_t FREQR;
+  volatile uint8_t OARL;
+  volatile uint8_t OARH;
+  uint8_t RESERVED1;
+  volatile uint8_t DR;
+  volatile uint8_t SR1;
+  volatile uint8_t SR2;
+  volatile uint8_t SR3;
+  volatile uint8_t ITR;
+  volatile uint8_t CCRL;
+  volatile uint8_t CCRH;
+  volatile uint8_t TRISER;
+  uint8_t RESERVED2;
+}
+I2C_TypeDef;
+# 1432 "include/stm8s.h"
+typedef struct ITC_struct
+{
+  volatile uint8_t ISPR1;
+  volatile uint8_t ISPR2;
+  volatile uint8_t ISPR3;
+  volatile uint8_t ISPR4;
+  volatile uint8_t ISPR5;
+  volatile uint8_t ISPR6;
+  volatile uint8_t ISPR7;
+  volatile uint8_t ISPR8;
+}
+ITC_TypeDef;
+# 1470 "include/stm8s.h"
+typedef struct EXTI_struct
+{
+  volatile uint8_t CR1;
+  volatile uint8_t CR2;
+}
+EXTI_TypeDef;
+# 1511 "include/stm8s.h"
+typedef struct FLASH_struct
+{
+  volatile uint8_t CR1;
+  volatile uint8_t CR2;
+  volatile uint8_t NCR2;
+  volatile uint8_t FPR;
+  volatile uint8_t NFPR;
+  volatile uint8_t IAPSR;
+  uint8_t RESERVED1;
+  uint8_t RESERVED2;
+  volatile uint8_t PUKR;
+  uint8_t RESERVED3;
+  volatile uint8_t DUKR;
+}
+FLASH_TypeDef;
+# 1581 "include/stm8s.h"
+typedef struct OPT_struct
+{
+  volatile uint8_t OPT0;
+  volatile uint8_t OPT1;
+  volatile uint8_t NOPT1;
+  volatile uint8_t OPT2;
+  volatile uint8_t NOPT2;
+  volatile uint8_t OPT3;
+  volatile uint8_t NOPT3;
+  volatile uint8_t OPT4;
+  volatile uint8_t NOPT4;
+  volatile uint8_t OPT5;
+  volatile uint8_t NOPT5;
+  uint8_t RESERVED1;
+  uint8_t RESERVED2;
+  volatile uint8_t OPT7;
+  volatile uint8_t NOPT7;
+}
+OPT_TypeDef;
+
+
+
+
+
+
+typedef struct IWDG_struct
+{
+  volatile uint8_t KR;
+  volatile uint8_t PR;
+  volatile uint8_t RLR;
+}
+IWDG_TypeDef;
+# 1630 "include/stm8s.h"
+typedef struct WWDG_struct
+{
+  volatile uint8_t CR;
+  volatile uint8_t WR;
+}
+WWDG_TypeDef;
+# 1668 "include/stm8s.h"
+typedef struct RST_struct
+{
+  volatile uint8_t SR;
+}
+RST_TypeDef;
+# 1693 "include/stm8s.h"
+typedef struct SPI_struct
+{
+  volatile uint8_t CR1;
+  volatile uint8_t CR2;
+  volatile uint8_t ICR;
+  volatile uint8_t SR;
+  volatile uint8_t DR;
+  volatile uint8_t CRCPR;
+  volatile uint8_t RXCRCR;
+  volatile uint8_t TXCRCR;
+}
+SPI_TypeDef;
+# 1764 "include/stm8s.h"
+typedef struct UART1_struct
+{
+  volatile uint8_t SR;
+  volatile uint8_t DR;
+  volatile uint8_t BRR1;
+  volatile uint8_t BRR2;
+  volatile uint8_t CR1;
+  volatile uint8_t CR2;
+  volatile uint8_t CR3;
+  volatile uint8_t CR4;
+  volatile uint8_t CR5;
+  volatile uint8_t GTR;
+  volatile uint8_t PSCR;
+}
+UART1_TypeDef;
+# 1862 "include/stm8s.h"
+typedef struct UART2_struct
+{
+  volatile uint8_t SR;
+  volatile uint8_t DR;
+  volatile uint8_t BRR1;
+  volatile uint8_t BRR2;
+  volatile uint8_t CR1;
+  volatile uint8_t CR2;
+  volatile uint8_t CR3;
+  volatile uint8_t CR4;
+  volatile uint8_t CR5;
+ volatile uint8_t CR6;
+  volatile uint8_t GTR;
+  volatile uint8_t PSCR;
+}
+UART2_TypeDef;
+# 1970 "include/stm8s.h"
+typedef struct UART3_struct
+{
+  volatile uint8_t SR;
+  volatile uint8_t DR;
+  volatile uint8_t BRR1;
+  volatile uint8_t BRR2;
+  volatile uint8_t CR1;
+  volatile uint8_t CR2;
+  volatile uint8_t CR3;
+  volatile uint8_t CR4;
+  uint8_t RESERVED;
+  volatile uint8_t CR6;
+}
+UART3_TypeDef;
+# 2063 "include/stm8s.h"
+typedef struct
+{
+  volatile uint8_t MCR;
+  volatile uint8_t MSR;
+  volatile uint8_t TSR;
+  volatile uint8_t TPR;
+  volatile uint8_t RFR;
+  volatile uint8_t IER;
+  volatile uint8_t DGR;
+  volatile uint8_t PSR;
+
+  union
+  {
+    struct
+    {
+      volatile uint8_t MCSR;
+      volatile uint8_t MDLCR;
+      volatile uint8_t MIDR1;
+      volatile uint8_t MIDR2;
+      volatile uint8_t MIDR3;
+      volatile uint8_t MIDR4;
+      volatile uint8_t MDAR1;
+      volatile uint8_t MDAR2;
+      volatile uint8_t MDAR3;
+      volatile uint8_t MDAR4;
+      volatile uint8_t MDAR5;
+      volatile uint8_t MDAR6;
+      volatile uint8_t MDAR7;
+      volatile uint8_t MDAR8;
+      volatile uint8_t MTSRL;
+      volatile uint8_t MTSRH;
+    }
+   TxMailbox;
+
+ struct
+    {
+      volatile uint8_t FR01;
+      volatile uint8_t FR02;
+      volatile uint8_t FR03;
+      volatile uint8_t FR04;
+      volatile uint8_t FR05;
+      volatile uint8_t FR06;
+      volatile uint8_t FR07;
+      volatile uint8_t FR08;
+
+      volatile uint8_t FR09;
+      volatile uint8_t FR10;
+      volatile uint8_t FR11;
+      volatile uint8_t FR12;
+      volatile uint8_t FR13;
+      volatile uint8_t FR14;
+      volatile uint8_t FR15;
+      volatile uint8_t FR16;
+    }
+ Filter;
+
+
+    struct
+    {
+      volatile uint8_t F0R1;
+      volatile uint8_t F0R2;
+      volatile uint8_t F0R3;
+      volatile uint8_t F0R4;
+      volatile uint8_t F0R5;
+      volatile uint8_t F0R6;
+      volatile uint8_t F0R7;
+      volatile uint8_t F0R8;
+
+      volatile uint8_t F1R1;
+      volatile uint8_t F1R2;
+      volatile uint8_t F1R3;
+      volatile uint8_t F1R4;
+      volatile uint8_t F1R5;
+      volatile uint8_t F1R6;
+      volatile uint8_t F1R7;
+   volatile uint8_t F1R8;
+    }
+   Filter01;
+
+    struct
+    {
+      volatile uint8_t F2R1;
+      volatile uint8_t F2R2;
+      volatile uint8_t F2R3;
+      volatile uint8_t F2R4;
+      volatile uint8_t F2R5;
+      volatile uint8_t F2R6;
+      volatile uint8_t F2R7;
+      volatile uint8_t F2R8;
+
+      volatile uint8_t F3R1;
+      volatile uint8_t F3R2;
+      volatile uint8_t F3R3;
+      volatile uint8_t F3R4;
+      volatile uint8_t F3R5;
+      volatile uint8_t F3R6;
+      volatile uint8_t F3R7;
+      volatile uint8_t F3R8;
+    }
+   Filter23;
+
+    struct
+    {
+      volatile uint8_t F4R1;
+      volatile uint8_t F4R2;
+      volatile uint8_t F4R3;
+      volatile uint8_t F4R4;
+      volatile uint8_t F4R5;
+      volatile uint8_t F4R6;
+      volatile uint8_t F4R7;
+      volatile uint8_t F4R8;
+
+      volatile uint8_t F5R1;
+      volatile uint8_t F5R2;
+      volatile uint8_t F5R3;
+      volatile uint8_t F5R4;
+      volatile uint8_t F5R5;
+      volatile uint8_t F5R6;
+      volatile uint8_t F5R7;
+      volatile uint8_t F5R8;
+    }
+   Filter45;
+
+    struct
+    {
+      volatile uint8_t ESR;
+      volatile uint8_t EIER;
+      volatile uint8_t TECR;
+      volatile uint8_t RECR;
+      volatile uint8_t BTR1;
+      volatile uint8_t BTR2;
+      u8 Reserved1[2];
+      volatile uint8_t FMR1;
+      volatile uint8_t FMR2;
+      volatile uint8_t FCR1;
+      volatile uint8_t FCR2;
+      volatile uint8_t FCR3;
+      u8 Reserved2[3];
+    }
+  Config;
+
+    struct
+    {
+      volatile uint8_t MFMI;
+      volatile uint8_t MDLCR;
+      volatile uint8_t MIDR1;
+      volatile uint8_t MIDR2;
+      volatile uint8_t MIDR3;
+      volatile uint8_t MIDR4;
+      volatile uint8_t MDAR1;
+      volatile uint8_t MDAR2;
+      volatile uint8_t MDAR3;
+      volatile uint8_t MDAR4;
+      volatile uint8_t MDAR5;
+      volatile uint8_t MDAR6;
+      volatile uint8_t MDAR7;
+      volatile uint8_t MDAR8;
+      volatile uint8_t MTSRL;
+      volatile uint8_t MTSRH;
+    }
+   RxFIFO;
+  }Page;
+} CAN_TypeDef;
+# 2421 "include/stm8s.h"
+typedef struct CFG_struct
+{
+  volatile uint8_t GCR;
+}
+CFG_TypeDef;
+# 8 "main.c" 2
+# 84 "main.c"
+typedef enum ret_t {
+
+ EXIT_OK,
+
+
+} ret_t;
+
+
+
+
+
+ret_t init(void) {
+
+
+    ((((GPIO_TypeDef *) 0x5000)->CR1) |= (0xFF));
+    ((((GPIO_TypeDef *) 0x5000)->DDR) &= ~((0xFF)));
+    ((((GPIO_TypeDef *) 0x5005)->CR1) |= (0xFF));
+    ((((GPIO_TypeDef *) 0x5005)->DDR) &= ~((0xFF)));
+    ((((GPIO_TypeDef *) 0x500A)->CR1) |= (0xFF));
+    ((((GPIO_TypeDef *) 0x500A)->DDR) &= ~((0xFF)));
+    ((((GPIO_TypeDef *) 0x500F)->CR1) |= (0xFF));
+    ((((GPIO_TypeDef *) 0x500F)->DDR) &= ~((0xFF)));
+
+}
+
+
+
+int main() {
+
+
+    init();
+
+
+ while(1){}
+
+}

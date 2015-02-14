@@ -40,7 +40,7 @@ CABS                                00000000    00000000 =           0. bytes (A
      0000001A  l_GSINIT                        
      00000020  s_BSEG_BYTES                    
      00000020  s__CODE                         
-     0000002F  l_CODE                          
+     00000050  l_CODE                          
      00000080  l_DSEG                          
      00000083  l_HOME                          
      00000100  l_IRAM                          
@@ -49,7 +49,7 @@ CABS                                00000000    00000000 =           0. bytes (A
      00008083  s_GSINIT                        
      0000809D  s_GSFINAL                       
      000080A0  s_CODE                          
-     000080CF  s_INITIALIZER                   
+     000080F0  s_INITIALIZER                   
 
 ASxxxx Linker V03.00 + NoICE + sdld,  page 2.
 Hexadecimal  [32-Bits]
@@ -112,18 +112,17 @@ Hexadecimal  [32-Bits]
 
 Area                                    Addr        Size        Decimal Bytes (Attributes)
 --------------------------------        ----        ----        ------- ----- ------------
-CODE                                000080A0    0000002F =          47. bytes (REL,CON)
+CODE                                000080A0    00000050 =          80. bytes (REL,CON)
 
       Value  Global                              Global Defined In Module
       -----  --------------------------------   ------------------------
-     000080A0  _blink                             blinky
-     000080BD  _main                              main
+     000080A0  _init                              main
+     000080EA  _main                              main
 
 ASxxxx Linker V03.00 + NoICE + sdld,  page 9.
 
 Files Linked                              [ module(s) ]
 
-build/blinky.rel                          [  ]
 build/main.rel                            [  ]
 
 ASxxxx Linker V03.00 + NoICE + sdld,  page 10.

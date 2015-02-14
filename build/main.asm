@@ -1,7 +1,7 @@
 ;--------------------------------------------------------
 ; File Created by SDCC : free open source ANSI-C Compiler
 ; Version 3.4.0 #8981 (Oct  6 2014) (Linux)
-; This file was generated Thu Feb 12 23:35:23 2015
+; This file was generated Sat Feb 14 15:53:52 2015
 ;--------------------------------------------------------
 	.module main
 	.optsdcc -mstm8
@@ -10,7 +10,7 @@
 ; Public variables in this module
 ;--------------------------------------------------------
 	.globl _main
-	.globl _blink
+	.globl _init
 ;--------------------------------------------------------
 ; ram data
 ;--------------------------------------------------------
@@ -107,23 +107,67 @@ __sdcc_program_startup:
 ; code
 ;--------------------------------------------------------
 	.area CODE
-;	main.c: 10: int main() {
+;	main.c: 95: ret_t init(void) {
+;	-----------------------------------------
+;	 function init
+;	-----------------------------------------
+_init:
+;	main.c: 98: ENABLE_PULLUP(GPIOA,ALL_PINS);
+	ldw	x, #0x5003
+	ld	a, (x)
+	ldw	x, #0x5003
+	ld	a, #0xff
+	ld	(x), a
+;	main.c: 99: SET_INPUT(GPIOA,ALL_PINS);
+	ldw	x, #0x5002
+	ld	a, (x)
+	ldw	x, #0x5002
+	clr	(x)
+;	main.c: 100: ENABLE_PULLUP(GPIOB,ALL_PINS);
+	ldw	x, #0x5008
+	ld	a, (x)
+	ldw	x, #0x5008
+	ld	a, #0xff
+	ld	(x), a
+;	main.c: 101: SET_INPUT(GPIOB,ALL_PINS);
+	ldw	x, #0x5007
+	ld	a, (x)
+	ldw	x, #0x5007
+	clr	(x)
+;	main.c: 102: ENABLE_PULLUP(GPIOC,ALL_PINS);
+	ldw	x, #0x500d
+	ld	a, (x)
+	ldw	x, #0x500d
+	ld	a, #0xff
+	ld	(x), a
+;	main.c: 103: SET_INPUT(GPIOC,ALL_PINS);
+	ldw	x, #0x500c
+	ld	a, (x)
+	ldw	x, #0x500c
+	clr	(x)
+;	main.c: 104: ENABLE_PULLUP(GPIOD,ALL_PINS);
+	ldw	x, #0x5012
+	ld	a, (x)
+	ldw	x, #0x5012
+	ld	a, #0xff
+	ld	(x), a
+;	main.c: 105: SET_INPUT(GPIOD,ALL_PINS);
+	ldw	x, #0x5011
+	ld	a, (x)
+	ldw	x, #0x5011
+	clr	(x)
+;	main.c: 108: return EXIT_OK;
+	clr	a
+	ret
+;	main.c: 114: int main() {
 ;	-----------------------------------------
 ;	 function main
 ;	-----------------------------------------
 _main:
-;	main.c: 13: PE_DDR = 0x80;
-	ldw	x, #0x5016
-	ld	a, #0x80
-	ld	(x), a
-;	main.c: 14: PE_CR1 = 0x80;
-	ldw	x, #0x5017
-	ld	a, #0x80
-	ld	(x), a
-;	main.c: 16: while(1){
+;	main.c: 117: init();
+	call	_init
+;	main.c: 120: while(1){}
 00102$:
-;	main.c: 17: blink();
-	call	_blink
 	jra	00102$
 	ret
 	.area CODE
