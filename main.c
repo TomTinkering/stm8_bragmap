@@ -57,22 +57,23 @@ pa1,pa2,pa3,pd1,pd4,pc7
 #define P7 (0x80)
 #define ALL_PINS (0xFF)
 
-/* GPIO input / output pairs
-pa1 / pa2
-pb4 / pb5
-pc3 / pc4
-pd2 / pd3 */
+//GPIO Touch pin definitions (grouped to reduce IO calls)
+#define TOUCH_GPIOC_A_PINS (P3 | P5)
+#define TOUCH_GPIOC_B_PINS (P4 | P6)
+#define TOUCH_GPIOA_A_PINS (P1)
+#define TOUCH_GPIOA_B_PINS (P2)
+#define TOUCH_NR_KEYS (6)
 
-//input output pins definitions
-#define GPIOA_SIDEA_PINS (P1)
-#define GPIOB_SIDEA_PINS (P4)
-#define GPIOC_SIDEA_PINS (P3)
-#define GPIOD_SIDEA_PINS (P2)
-//SIDEB
-#define GPIOA_SIDEB_PINS (P2)
-#define GPIOB_SIDEB_PINS (P5)
-#define GPIOC_SIDEB_PINS (P4)
-#define GPIOD_SIDEB_PINS (P3)
+//GPIO Led output pins
+typedef struct touch_io_t {
+    uint8_t io_pin;
+    GPIO_TypeDef *io_port;
+    uint8_t led_pin;
+    GPIO_TypeDef *led_port;
+} touch_io_t;
+
+//storage for key adminitration
+touch_io_t TOUCH_keys[6];
 
 typedef enum ret_t {
 
@@ -80,6 +81,64 @@ typedef enum ret_t {
 
 
 } ret_t;
+
+
+/** *****************************************************************
+ * @brief  initialize touch GPIO settings, timers and interrupts
+ * @retval EXIT_OK, unless init failed
+ ***************************************************************** */
+ret_t TOUCH_init(void) {
+
+    uint8_t i;
+
+    //(manually) set touch admin info
+    TOUCH_keys[0].io_pin = P3;
+    TOUCH_keys[0].io_port = GPIOC;
+    TOUCH_keys[0].led_pin = P7;
+    TOUCH_keys[0].led_port = GPIOC;
+
+    TOUCH_keys[1].io_pin = P4;
+    TOUCH_keys[1].io_port = GPIOC;
+    TOUCH_keys[1].led_pin = P1;
+    TOUCH_keys[1].led_port = GPIOD;
+
+    TOUCH_keys[2].io_pin = P5;
+    TOUCH_keys[2].io_port = GPIOC;
+    TOUCH_keys[2].led_pin = P2;
+    TOUCH_keys[2].led_port = GPIOD;
+
+    TOUCH_keys[3].io_pin = P6;
+    TOUCH_keys[3].io_port = GPIOC;
+    TOUCH_keys[3].led_pin = P3;
+    TOUCH_keys[3].led_port = GPIOD;
+
+    TOUCH_keys[4].io_pin = P1;
+    TOUCH_keys[4].io_port = GPIOA;
+    TOUCH_keys[4].led_pin = P4;
+    TOUCH_keys[4].led_port = GPIOD;
+
+    TOUCH_keys[5].io_pin = P2;
+    TOUCH_keys[5].io_port = GPIOA;
+    TOUCH_keys[5].led_pin = P3;
+    TOUCH_keys[5].led_port = GPIOA;
+
+    //initialize touch pin settings
+    for(i=0;i<TOUCH_NR_KEYS;i++){
+        //set to output
+        SET_OUTPUT(TOUCH_keys[i].led_port,TOUCH_keys[i].led_pin);
+        SET_OUTPUT(TOUCH_keys[i].io_port,TOUCH_keys[i].io_pin);
+        //disable pullup
+        DISABLE_PULLUP(TOUCH_keys[i].led_port,TOUCH_keys[i].led_pin);
+        DISABLE_PULLUP(TOUCH_keys[i].io_port,TOUCH_keys[i].io_pin);
+        //set output to zero
+        SET_LOW(TOUCH_keys[i].led_port,TOUCH_keys[i].led_pin);
+        SET_LOW(TOUCH_keys[i].io_port,TOUCH_keys[i].io_pin);
+    }
+
+    //TODO: remove, will always reach
+    return EXIT_OK;
+
+}
 
 
 /** *****************************************************************
