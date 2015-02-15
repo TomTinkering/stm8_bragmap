@@ -603,13 +603,84 @@ typedef struct CFG_struct
 }
 CFG_TypeDef;
 # 8 "main.c" 2
-# 84 "main.c"
+# 76 "main.c"
+typedef struct touch_io_t {
+    uint8_t io_pin;
+    GPIO_TypeDef *io_port;
+    uint8_t led_pin;
+    GPIO_TypeDef *led_port;
+} touch_io_t;
+
+
+touch_io_t TOUCH_keys[6];
+
 typedef enum ret_t {
 
  EXIT_OK,
 
 
 } ret_t;
+
+
+
+
+
+
+ret_t TOUCH_init(void) {
+
+    uint8_t i;
+
+
+    TOUCH_keys[0].io_pin = (0x08);
+    TOUCH_keys[0].io_port = ((GPIO_TypeDef *) 0x500A);
+    TOUCH_keys[0].led_pin = (0x80);
+    TOUCH_keys[0].led_port = ((GPIO_TypeDef *) 0x500A);
+
+    TOUCH_keys[1].io_pin = (0x10);
+    TOUCH_keys[1].io_port = ((GPIO_TypeDef *) 0x500A);
+    TOUCH_keys[1].led_pin = (0x02);
+    TOUCH_keys[1].led_port = ((GPIO_TypeDef *) 0x500F);
+
+    TOUCH_keys[2].io_pin = (0x20);
+    TOUCH_keys[2].io_port = ((GPIO_TypeDef *) 0x500A);
+    TOUCH_keys[2].led_pin = (0x04);
+    TOUCH_keys[2].led_port = ((GPIO_TypeDef *) 0x500F);
+
+    TOUCH_keys[3].io_pin = (0x40);
+    TOUCH_keys[3].io_port = ((GPIO_TypeDef *) 0x500A);
+    TOUCH_keys[3].led_pin = (0x08);
+    TOUCH_keys[3].led_port = ((GPIO_TypeDef *) 0x500F);
+
+    TOUCH_keys[4].io_pin = (0x02);
+    TOUCH_keys[4].io_port = ((GPIO_TypeDef *) 0x5000);
+    TOUCH_keys[4].led_pin = (0x10);
+    TOUCH_keys[4].led_port = ((GPIO_TypeDef *) 0x500F);
+
+    TOUCH_keys[5].io_pin = (0x04);
+    TOUCH_keys[5].io_port = ((GPIO_TypeDef *) 0x5000);
+    TOUCH_keys[5].led_pin = (0x08);
+    TOUCH_keys[5].led_port = ((GPIO_TypeDef *) 0x5000);
+
+
+    for(i=0;i<(6);i++){
+
+        ((TOUCH_keys[i].led_port->DDR) |= TOUCH_keys[i].led_pin);
+        ((TOUCH_keys[i].io_port->DDR) |= TOUCH_keys[i].io_pin);
+
+        ((TOUCH_keys[i].led_port->CR1) |= TOUCH_keys[i].led_pin);
+        ((TOUCH_keys[i].io_port->CR1) |= TOUCH_keys[i].io_pin);
+
+        ((TOUCH_keys[i].led_port->ODR) &= ~(TOUCH_keys[i].led_pin));
+        ((TOUCH_keys[i].io_port->ODR) &= ~(TOUCH_keys[i].io_pin));
+    }
+
+
+
+
+    return EXIT_OK;
+
+}
+
 
 
 
@@ -627,7 +698,41 @@ ret_t init(void) {
     ((((GPIO_TypeDef *) 0x500F)->CR1) |= (0xFF));
     ((((GPIO_TypeDef *) 0x500F)->DDR) &= ~((0xFF)));
 
+
+
+
+    return EXIT_OK;
+
 }
+
+
+ret_t TOUCH_single_cycle(){
+
+
+
+
+
+    ((((GPIO_TypeDef *) 0x5000)->ODR) |= ((0x02)));
+    ((((GPIO_TypeDef *) 0x5005)->ODR) |= ());
+    ((((GPIO_TypeDef *) 0x500A)->ODR) |= ((0x08) | (0x20)));
+    ((((GPIO_TypeDef *) 0x500F)->ODR) |= ());
+
+    ((((GPIO_TypeDef *) 0x5000)->ODR) |= ((0x04)));
+    ((((GPIO_TypeDef *) 0x5005)->ODR) |= ());
+    ((((GPIO_TypeDef *) 0x500A)->ODR) |= ((0x10) | (0x40)));
+    ((((GPIO_TypeDef *) 0x500F)->ODR) |= ());
+
+
+
+
+
+    return EXIT_OK;
+
+
+}
+
+
+
 
 
 

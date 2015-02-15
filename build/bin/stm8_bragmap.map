@@ -12,7 +12,6 @@ CABS                                00000000    00000000 =           0. bytes (A
      00000000  l_BSEG_BYTES                    
      00000000  l_CABS                          
      00000000  l_DABS                          
-     00000000  l_DATA                          
      00000000  l_INITIALIZED                   
      00000000  l_INITIALIZER                   
      00000000  l_ISEG                          
@@ -29,7 +28,6 @@ CABS                                00000000    00000000 =           0. bytes (A
      00000000  s_REG_BANK_0                    
      00000000  s_SSEG                          
      00000001  s_DATA                          
-     00000001  s_INITIALIZED                   
      00000003  l_GSFINAL                       
      00000008  s_REG_BANK_1                    
      00000010  s_REG_BANK_2                    
@@ -40,16 +38,18 @@ CABS                                00000000    00000000 =           0. bytes (A
      0000001A  l_GSINIT                        
      00000020  s_BSEG_BYTES                    
      00000020  s__CODE                         
-     00000050  l_CODE                          
+     00000024  l_DATA                          
+     00000025  s_INITIALIZED                   
      00000080  l_DSEG                          
      00000083  l_HOME                          
      00000100  l_IRAM                          
      00000100  l_SSEG                          
+     000001D3  l_CODE                          
      00008000  s_HOME                          
      00008083  s_GSINIT                        
      0000809D  s_GSFINAL                       
      000080A0  s_CODE                          
-     000080F0  s_INITIALIZER                   
+     00008273  s_INITIALIZER                   
 
 ASxxxx Linker V03.00 + NoICE + sdld,  page 2.
 Hexadecimal  [32-Bits]
@@ -85,16 +85,18 @@ Hexadecimal  [32-Bits]
 
 Area                                    Addr        Size        Decimal Bytes (Attributes)
 --------------------------------        ----        ----        ------- ----- ------------
-HOME                                00008000    00000083 =         131. bytes (REL,CON)
+DATA                                00000001    00000024 =          36. bytes (REL,CON)
 
       Value  Global                              Global Defined In Module
       -----  --------------------------------   ------------------------
+     00000001  _TOUCH_keys                        main
+
 ASxxxx Linker V03.00 + NoICE + sdld,  page 6.
 Hexadecimal  [32-Bits]
 
 Area                                    Addr        Size        Decimal Bytes (Attributes)
 --------------------------------        ----        ----        ------- ----- ------------
-GSINIT                              00008083    0000001A =          26. bytes (REL,CON)
+HOME                                00008000    00000083 =         131. bytes (REL,CON)
 
       Value  Global                              Global Defined In Module
       -----  --------------------------------   ------------------------
@@ -103,7 +105,7 @@ Hexadecimal  [32-Bits]
 
 Area                                    Addr        Size        Decimal Bytes (Attributes)
 --------------------------------        ----        ----        ------- ----- ------------
-GSFINAL                             0000809D    00000003 =           3. bytes (REL,CON)
+GSINIT                              00008083    0000001A =          26. bytes (REL,CON)
 
       Value  Global                              Global Defined In Module
       -----  --------------------------------   ------------------------
@@ -112,20 +114,31 @@ Hexadecimal  [32-Bits]
 
 Area                                    Addr        Size        Decimal Bytes (Attributes)
 --------------------------------        ----        ----        ------- ----- ------------
-CODE                                000080A0    00000050 =          80. bytes (REL,CON)
+GSFINAL                             0000809D    00000003 =           3. bytes (REL,CON)
 
       Value  Global                              Global Defined In Module
       -----  --------------------------------   ------------------------
-     000080A0  _init                              main
-     000080EA  _main                              main
-
 ASxxxx Linker V03.00 + NoICE + sdld,  page 9.
+Hexadecimal  [32-Bits]
+
+Area                                    Addr        Size        Decimal Bytes (Attributes)
+--------------------------------        ----        ----        ------- ----- ------------
+CODE                                000080A0    000001D3 =         467. bytes (REL,CON)
+
+      Value  Global                              Global Defined In Module
+      -----  --------------------------------   ------------------------
+     000080A0  _TOUCH_init                        main
+     000081E5  _init                              main
+     0000822F  _TOUCH_single_cycle                main
+     0000826D  _main                              main
+
+ASxxxx Linker V03.00 + NoICE + sdld,  page 10.
 
 Files Linked                              [ module(s) ]
 
 build/main.rel                            [  ]
 
-ASxxxx Linker V03.00 + NoICE + sdld,  page 10.
+ASxxxx Linker V03.00 + NoICE + sdld,  page 11.
 
 User Base Address Definitions
 

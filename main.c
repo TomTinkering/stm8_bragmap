@@ -4,7 +4,7 @@
  *  Created on: Feb 12, 2015
  *      Author: tomv
  */
-#include "stm8s.h"
+#include "global.h"
 
 /*
  *
@@ -40,11 +40,15 @@ pa1,pa2,pa3,pd1,pd4,pc7
 #define SET_HIGH(port,pins)         ((port->ODR) |= pins)
 #define SET_LOW(port,pins)          ((port->ODR) &= ~(pins))
 #define TOGGLE(port,pins)           ((port->ODR) ^= pins)
-#define READ(port,pins)             ((port->IDR) & pins)
-#define SET_INPUT(port,pins)        ((port->DDR) &= ~(pins))
+
 #define SET_OUTPUT(port,pins)       ((port->DDR) |= pins)
+#define SET_INPUT(port,pins)        ((port->DDR) &= ~(pins))
 #define ENABLE_PULLUP(port,pins)    ((port->CR1) |= pins)
-#define DISABLE_PULLUP(port,pins)   ((port->CR1) |= pins)
+#define DISABLE_PULLUP(port,pins)   ((port->CR1) &= ~(pins))
+#define ENABLE_EXTI(port,pins)      ((port->CR2) |= pins)
+#define DISABLE_EXTI(port,pins)     ((port->CR2) &= ~(pins))
+#define READ(port,pins)             ((port->IDR) & pins)
+
 
 //GPIO Pin number alias
 #define P0 (0x01)
@@ -56,13 +60,30 @@ pa1,pa2,pa3,pd1,pd4,pc7
 #define P6 (0x40)
 #define P7 (0x80)
 #define ALL_PINS (0xFF)
+#define NO_PINS (0x00)
 
 //GPIO Touch pin definitions (grouped to reduce IO calls)
-#define TOUCH_GPIOC_A_PINS (P3 | P5)
-#define TOUCH_GPIOC_B_PINS (P4 | P6)
+//TODO: check settings!!!
 #define TOUCH_GPIOA_A_PINS (P1)
 #define TOUCH_GPIOA_B_PINS (P2)
+
+#define TOUCH_GPIOB_A_PINS (NO_PINS)
+#define TOUCH_GPIOB_B_PINS (NO_PINS)
+
+#define TOUCH_GPIOC_A_PINS (P3 | P5)
+#define TOUCH_GPIOC_B_PINS (P4 | P6)
+
+#define TOUCH_GPIOD_A_PINS (NO_PINS)
+#define TOUCH_GPIOD_B_PINS (NO_PINS)
+
 #define TOUCH_NR_KEYS (6)
+
+#define TOUCH_TIMEOUT_TIMER (0)
+#define TOUCH_TIMEOUT_MS    (3)
+
+#define EXTI_ALL_FALLING_EDGE (0xAA) //0b10101010
+#define EXTI_ALL_RISING_EDGE  (0x55) //0b01010101
+
 
 //GPIO Led output pins
 typedef struct touch_io_t {
@@ -72,8 +93,10 @@ typedef struct touch_io_t {
     GPIO_TypeDef *led_port;
 } touch_io_t;
 
-//storage for key adminitration
+
+//storage for key administration
 touch_io_t TOUCH_keys[6];
+
 
 typedef enum ret_t {
 
@@ -92,6 +115,7 @@ ret_t TOUCH_init(void) {
     uint8_t i;
 
     //(manually) set touch admin info
+    //TODO: check settings!!
     TOUCH_keys[0].io_pin = P3;
     TOUCH_keys[0].io_port = GPIOC;
     TOUCH_keys[0].led_pin = P7;
@@ -135,6 +159,8 @@ ret_t TOUCH_init(void) {
         SET_LOW(TOUCH_keys[i].io_port,TOUCH_keys[i].io_pin);
     }
 
+
+
     //TODO: remove, will always reach
     return EXIT_OK;
 
@@ -157,10 +183,84 @@ ret_t init(void) {
     ENABLE_PULLUP(GPIOD,ALL_PINS);
     SET_INPUT(GPIOD,ALL_PINS);
 
+    //initialize touch interface
+    TOUCH_init();
+
     //TODO: remove, will always reach
     return EXIT_OK;
 
 }
+
+
+ret_t TOUCH_discharge_cycle(uint8_t recv_pins, uint8_t drive_pins){
+
+
+    //pseudo code
+
+    //set all pins to high output
+    SET_HIGH(GPIOA,TOUCH_GPIOA_A_PINS);
+    SET_HIGH(GPIOB,TOUCH_GPIOB_A_PINS);
+    SET_HIGH(GPIOC,TOUCH_GPIOC_A_PINS);
+    SET_HIGH(GPIOD,TOUCH_GPIOD_A_PINS);
+
+    SET_HIGH(GPIOA,TOUCH_GPIOA_B_PINS);
+    SET_HIGH(GPIOB,TOUCH_GPIOB_B_PINS);
+    SET_HIGH(GPIOC,TOUCH_GPIOC_B_PINS);
+    SET_HIGH(GPIOD,TOUCH_GPIOD_B_PINS);
+
+    //wait to settle (<1ms)
+    SYSTIME_delay_us(100);
+
+    //set meas side to input - no pullup - interrupt enabled
+    SET_INPUT(GPIOA,TOUCH_GPIOA_A_PINS);
+    SET_INPUT(GPIOB,TOUCH_GPIOB_A_PINS);
+    SET_INPUT(GPIOC,TOUCH_GPIOC_A_PINS);
+    SET_INPUT(GPIOD,TOUCH_GPIOD_A_PINS);
+
+    ENABLE_EXTI(GPIOA,TOUCH_GPIOA_A_PINS);
+    ENABLE_EXTI(GPIOB,TOUCH_GPIOB_A_PINS);
+    ENABLE_EXTI(GPIOC,TOUCH_GPIOC_A_PINS);
+    ENABLE_EXTI(GPIOD,TOUCH_GPIOD_A_PINS);
+
+    //set interrupt to falling edge
+    EXTI->CR1 = (EXTI_ALL_FALLING_EDGE);
+
+    //enable GPIO interrupts , disable other interrupts
+
+    //start measurement timeout (3ms)
+    SYSTIME_set_timeout(TOUCH_TIMEOUT_TIMER, TOUCH_TIMEOUT_MS);
+    //start timer
+    TIM2->CNTRH = 0x00;
+    TIM2->CNTRL = 0x00;
+    TIM2->CR1 |= TIM2_CR1_CEN;
+    //set drive side low
+    SET_LOW(GPIOA,TOUCH_GPIOA_B_PINS);
+    SET_LOW(GPIOB,TOUCH_GPIOB_B_PINS);
+    SET_LOW(GPIOC,TOUCH_GPIOC_B_PINS);
+    SET_LOW(GPIOD,TOUCH_GPIOD_B_PINS);
+    //wait on timeout
+    while(SYSTIME_get_timeout_state(TOUCH_TIMEOUT_TIMER) == SYSTIME_TIMEOUT_ACTIVE)
+    {
+        //wait
+    }
+
+    //stop timer
+    TIM2->CR1 &= ~TIM2_CR1_CEN;
+
+    //disable GPIO interrupts, enable other interrupts
+
+
+
+
+
+
+    //TODO: remove, will always reach
+    return EXIT_OK;
+
+
+}
+
+
 
 
 /** *****************************************************************
