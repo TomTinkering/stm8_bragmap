@@ -5,6 +5,7 @@
  *      Author: tomv
  */
 #include "global.h"
+#include "sys_time.h"
 
 /*
  *
@@ -159,6 +160,16 @@ ret_t TOUCH_init(void) {
         SET_LOW(TOUCH_keys[i].io_port,TOUCH_keys[i].io_pin);
     }
 
+    //initialize timer
+    TIM2->CR1 = 0x00;
+    TIM2->CR1 |= TIM2_CR1_OPM; //stop counting when end is reached
+    TIM2->IER = 0x00; //disable all interrupts from this timer
+    TIM2->ARRH = 0x00;
+    TIM2->ARRL = 0x00; //use auto update register for reset action
+    TIM2->EGR |= TIM2_EGR_UG; //reset timer
+    TIM2->PSCR = 0x00; //no prescaler
+
+    //setup GPIO (EXTI) interrupts
 
 
     //TODO: remove, will always reach
@@ -167,32 +178,7 @@ ret_t TOUCH_init(void) {
 }
 
 
-/** *****************************************************************
- * @brief  initialize default peripheral settings
- * @retval EXIT_OK, unless init failed
- ***************************************************************** */
-ret_t init(void) {
-
-    //set all GPIO pins to input with pull up enabled
-    ENABLE_PULLUP(GPIOA,ALL_PINS);
-    SET_INPUT(GPIOA,ALL_PINS);
-    ENABLE_PULLUP(GPIOB,ALL_PINS);
-    SET_INPUT(GPIOB,ALL_PINS);
-    ENABLE_PULLUP(GPIOC,ALL_PINS);
-    SET_INPUT(GPIOC,ALL_PINS);
-    ENABLE_PULLUP(GPIOD,ALL_PINS);
-    SET_INPUT(GPIOD,ALL_PINS);
-
-    //initialize touch interface
-    TOUCH_init();
-
-    //TODO: remove, will always reach
-    return EXIT_OK;
-
-}
-
-
-ret_t TOUCH_discharge_cycle(uint8_t recv_pins, uint8_t drive_pins){
+ret_t TOUCH_discharge_cycle(){
 
 
     //pseudo code
@@ -229,19 +215,22 @@ ret_t TOUCH_discharge_cycle(uint8_t recv_pins, uint8_t drive_pins){
 
     //start measurement timeout (3ms)
     SYSTIME_set_timeout(TOUCH_TIMEOUT_TIMER, TOUCH_TIMEOUT_MS);
-    //start timer
+    //reset timer
     TIM2->CNTRH = 0x00;
     TIM2->CNTRL = 0x00;
+    TIM2->EGR |= TIM2_EGR_UG;
+    //start timer
     TIM2->CR1 |= TIM2_CR1_CEN;
+
     //set drive side low
     SET_LOW(GPIOA,TOUCH_GPIOA_B_PINS);
     SET_LOW(GPIOB,TOUCH_GPIOB_B_PINS);
     SET_LOW(GPIOC,TOUCH_GPIOC_B_PINS);
     SET_LOW(GPIOD,TOUCH_GPIOD_B_PINS);
     //wait on timeout
-    while(SYSTIME_get_timeout_state(TOUCH_TIMEOUT_TIMER) == SYSTIME_TIMEOUT_ACTIVE)
+    while( (TIM2->CR1 & TIM2_CR1_CEN) != 0x00)
     {
-        //wait
+        __asm__ ("nop\n"); //wait for finish
     }
 
     //stop timer
@@ -259,6 +248,34 @@ ret_t TOUCH_discharge_cycle(uint8_t recv_pins, uint8_t drive_pins){
 
 
 }
+
+
+/** *****************************************************************
+ * @brief  initialize default peripheral settings
+ * @retval EXIT_OK, unless init failed
+ ***************************************************************** */
+ret_t init(void) {
+
+    //set all GPIO pins to input with pull up enabled
+    ENABLE_PULLUP(GPIOA,ALL_PINS);
+    SET_INPUT(GPIOA,ALL_PINS);
+    ENABLE_PULLUP(GPIOB,ALL_PINS);
+    SET_INPUT(GPIOB,ALL_PINS);
+    ENABLE_PULLUP(GPIOC,ALL_PINS);
+    SET_INPUT(GPIOC,ALL_PINS);
+    ENABLE_PULLUP(GPIOD,ALL_PINS);
+    SET_INPUT(GPIOD,ALL_PINS);
+
+    //initialize touch interface
+    TOUCH_init();
+
+    //TODO: remove, will always reach
+    return EXIT_OK;
+
+}
+
+
+
 
 
 

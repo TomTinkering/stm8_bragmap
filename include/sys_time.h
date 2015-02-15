@@ -38,7 +38,8 @@
 //Macro's
 
 //TODO: verify read order is not truncated!
-#define SYSTIME_GET_TIME    (uint16_t)((uint16_t)((TIM1->CNTRH) << 8) | (uint16_t)TIM1->CNTRL )
+#define CUR_SYSTEM_TIME    ((uint16_t)((uint16_t)((TIM1->CNTRH) << 8) | (uint16_t)TIM1->CNTRL ))
+
 
 //*******************************************************************
 //Type Definitions

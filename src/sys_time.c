@@ -62,12 +62,12 @@ void SYSTIME_init(void)
 ******************************************************************* */
 void SYSTIME_delay_ms(uint16_t ms)
 {
-	uint32_t startTime = SYSTIME_GET_TIME();
+	uint32_t startTime = CUR_SYSTEM_TIME;
 
 	//C standard guarantees correct operation on unsigned overflows in this case
-	while(SYSTIME_GET_TIME() - startTime < (uint32_t)ms){
+	while(CUR_SYSTEM_TIME - startTime < (uint32_t)ms){
 		//actively do nothing to avoid compiler optimizations
-		__asm__ volatile ("mov r0, r0");
+	    __asm__ ("nop\n");
 	}
 }
 
@@ -82,9 +82,9 @@ void SYSTIME_delay_us(uint16_t us) {
 
   while(iterations--)
   {
-      __asm__ volatile ("mov r0, r0");
-      __asm__ volatile ("mov r0, r0");
-      __asm__ volatile ("mov r0, r0");
+      __asm__ ("nop\n");
+      __asm__ ("nop\n");
+      __asm__ ("nop\n");
   }
     return;
 }
@@ -105,7 +105,7 @@ systime_t SYSTIME_get_timeout_state(uint8_t timer)
 	if(result == SYSTIME_TIMEOUT_ACTIVE)
 	{
 		//if expired, update state.
-		if(SYSTIME_GET_TIME() - g_timeouts[timer].startTime >= g_timeouts[timer].ms)
+		if(CUR_SYSTEM_TIME - g_timeouts[timer].startTime >= g_timeouts[timer].ms)
 		{
 			result = SYSTIME_TIMEOUT_EXPIRED;
 		}
@@ -125,7 +125,7 @@ systime_t SYSTIME_get_timeout_state(uint8_t timer)
 ******************************************************************* */
 void SYSTIME_set_timeout(uint8_t timer, uint16_t ms)
 {
-	g_timeouts[timer].startTime = SYSTIME_GET_TIME();
+	g_timeouts[timer].startTime = CUR_SYSTEM_TIME;
 	g_timeouts[timer].ms = ms;
 	g_timeouts[timer].state = SYSTIME_TIMEOUT_ACTIVE;
 }
